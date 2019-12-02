@@ -1,15 +1,16 @@
 package com.krungsri.backendtest.repository;
 
 import com.krungsri.backendtest.model.User;
+import io.vavr.control.Either;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface UserRepository {
-    int insertUser(UUID id, User user);
+    Either<Integer, Integer> insertUser(UUID id, User user);
 
-    default int insertUser(User user) {
+    default Either<Integer, Integer> insertUser(User user) {
         return insertUser(UUID.randomUUID(), user);
     }
 

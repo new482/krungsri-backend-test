@@ -13,7 +13,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String address;
-    private String salary;
+    private long salary;
     private String refCode;
 
     public User(UUID id,
@@ -23,7 +23,7 @@ public class User {
                 @JsonProperty("firstName") String firstName,
                 @JsonProperty("lastName") String lastName,
                 @JsonProperty("address") String address,
-                @JsonProperty("salary") String salary,
+                @JsonProperty("salary") long salary,
                 String refCode) {
         this.id = id;
         this.refCode = refCode;
@@ -68,7 +68,7 @@ public class User {
         return address;
     }
 
-    public String getSalary() {
+    public long getSalary() {
         return salary;
     }
 }

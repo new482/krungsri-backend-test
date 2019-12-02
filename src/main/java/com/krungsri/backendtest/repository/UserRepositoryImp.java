@@ -1,6 +1,7 @@
 package com.krungsri.backendtest.repository;
 
 import com.krungsri.backendtest.model.User;
+import io.vavr.control.Either;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class UserRepositoryImp implements UserRepository {
     private static List<User> DB = new ArrayList<>();
 
     @Override
-    public int insertUser(UUID id, User user) {
+    public Either<Integer, Integer> insertUser(UUID id, User user) {
         DB.add(new User(id,
                 user.getUsername(),
                 user.getPassword(),
@@ -24,7 +25,7 @@ public class UserRepositoryImp implements UserRepository {
                 user.getAddress(),
                 user.getSalary(),
                 user.getRefCode()));
-        return 1;
+        return Either.right(1);
     }
 
     @Override
