@@ -2,6 +2,7 @@ package com.krungsri.backendtest.controller;
 
 import com.krungsri.backendtest.model.Person;
 import com.krungsri.backendtest.service.PersonService;
+import io.vavr.control.Either;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
+
+import static io.vavr.API.*;
+import static io.vavr.Patterns.$Left;
+import static io.vavr.Patterns.$Right;
+import static io.vavr.Predicates.instanceOf;
 
 @RequestMapping("api/v1/person")
 @RestController
@@ -23,7 +29,10 @@ public class PersonController {
 
     @PostMapping
     public void registerPerson(@Valid @NonNull @RequestBody Person person) {
-        personService.register(person);
+        Match(personService.register(person)).of(
+                Case($Right($()), v -> v),
+                Case($Left($(instanceOf(Exception.class))), e -> e)
+        );
     }
 
     @GetMapping

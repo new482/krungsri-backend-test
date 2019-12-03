@@ -7,5 +7,6 @@ CREATE TABLE person (
     last_name VARCHAR(64) NOT NULL,
     address TEXT NOT NULL,
     salary BIGINT NOT NULL,
-    ref_code VARCHAR(16) NOT NULL
+    ref_code VARCHAR(16) NOT NULL,
+    UNIQUE(username)
 );

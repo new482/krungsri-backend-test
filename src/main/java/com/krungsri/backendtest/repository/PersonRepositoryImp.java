@@ -41,8 +41,10 @@ public class PersonRepositoryImp implements PersonRepository {
                     person.getSalary(),
                     person.getRefCode()
             );
+            System.out.println("Insert success");
             return Either.right(1);
         } catch (Exception e) {
+            System.out.println("Insert error: " + e);
             return Either.left(e);
         }
     }
