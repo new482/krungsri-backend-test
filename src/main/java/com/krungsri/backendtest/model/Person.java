@@ -71,4 +71,5 @@ public class Person {
     public long getSalary() {
         return salary;
     }
+
 }

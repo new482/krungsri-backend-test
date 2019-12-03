@@ -1,5 +1,6 @@
 package com.krungsri.backendtest.service;
 
+import com.krungsri.backendtest.dto.PersonDTO;
 import com.krungsri.backendtest.model.Person;
 import com.krungsri.backendtest.repository.PersonRepository;
 import io.vavr.control.Either;
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class PersonService {
@@ -38,12 +40,45 @@ public class PersonService {
         }
     }
 
-    public List<Person> getAllPerson() {
-        return personRepository.findAll();
+    public List<PersonDTO> getAllPerson() {
+        List<Person> personList = personRepository.findAll();
+        return personList
+                .stream()
+                .map(v -> new PersonDTO(
+                        v.getId(),
+                        v.getPhoneNo(),
+                        v.getFirstName(),
+                        v.getLastName(),
+                        v.getAddress(),
+                        v.getSalary(),
+                        v.getRefCode(),
+                        classifyMemberType(v.getSalary()))
+        ).collect(Collectors.toList());
     }
 
-    public Optional<Person> getPersonById(UUID id) {
-        return personRepository.findById(id);
+    public Optional<PersonDTO> getPersonById(UUID id) {
+
+        return personRepository.findById(id)
+                .map(v -> new PersonDTO(
+                        v.getId(),
+                        v.getPhoneNo(),
+                        v.getFirstName(),
+                        v.getLastName(),
+                        v.getAddress(),
+                        v.getSalary(),
+                        v.getRefCode(),
+                        classifyMemberType(v.getSalary()))
+
+                );
+    }
+
+    private String classifyMemberType(Long salary) {
+        if (salary > 50000)
+            return "Platinum";
+        else if (salary > 30000)
+            return "Gold";
+        else
+            return "Silver";
     }
 
 }

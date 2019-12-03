@@ -1,5 +1,6 @@
 package com.krungsri.backendtest.controller;
 
+import com.krungsri.backendtest.dto.PersonDTO;
 import com.krungsri.backendtest.model.Person;
 import com.krungsri.backendtest.service.PersonService;
 import io.vavr.control.Either;
@@ -36,12 +37,12 @@ public class PersonController {
     }
 
     @GetMapping
-    public List<Person> getAllPerson() {
+    public List<PersonDTO> getAllPerson() {
         return personService.getAllPerson();
     }
 
     @GetMapping(path = "{id}")
-    public Person getUserById(@PathVariable("id") UUID id) {
+    public PersonDTO getUserById(@PathVariable("id") UUID id) {
         return personService.getPersonById(id).orElse(null);
     }
 }

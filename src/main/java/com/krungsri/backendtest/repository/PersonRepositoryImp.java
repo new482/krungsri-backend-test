@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -14,11 +13,11 @@ import java.util.UUID;
 @Repository("postgres")
 public class PersonRepositoryImp implements PersonRepository {
 
-    private static List<Person> DB = new ArrayList<>();
     private final JdbcTemplate jdbc;
 
     @Autowired
     public PersonRepositoryImp(JdbcTemplate jdbc) {
+
         this.jdbc = jdbc;
     }
 
