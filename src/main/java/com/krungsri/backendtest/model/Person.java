@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.UUID;
 
-public class User {
+public class Person {
 
     private final UUID id;
     private final String username;
@@ -16,15 +16,15 @@ public class User {
     private long salary;
     private String refCode;
 
-    public User(UUID id,
-                @JsonProperty("username") String username,
-                @JsonProperty("password") String password,
-                @JsonProperty("phoneNo") String phoneNo,
-                @JsonProperty("firstName") String firstName,
-                @JsonProperty("lastName") String lastName,
-                @JsonProperty("address") String address,
-                @JsonProperty("salary") long salary,
-                String refCode) {
+    public Person(UUID id,
+                  @JsonProperty("username") String username,
+                  @JsonProperty("password") String password,
+                  @JsonProperty("phoneNo") String phoneNo,
+                  @JsonProperty("firstName") String firstName,
+                  @JsonProperty("lastName") String lastName,
+                  @JsonProperty("address") String address,
+                  @JsonProperty("salary") long salary,
+                  String refCode) {
         this.id = id;
         this.refCode = refCode;
         this.username = username;
