@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,13 +23,18 @@ public class PersonService {
     }
 
     public Either<Exception, Integer> register(Person person) {
-        int phoneLength = person.getPhoneNo().length();
-        person.setRefCode(person.getPhoneNo().substring(phoneLength - 4, phoneLength));
+        if (person.getSalary() >= 15000) {
+            Date date = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+            String formattedDate = formatter.format(date);
+            int phoneLength = person.getPhoneNo().length();
+            String formattedPhoneNo = person.getPhoneNo().substring(phoneLength - 4, phoneLength);
 
-        if (person.getSalary() < 0 || person.getSalary() < 15000) {
-            return Either.left(new Exception(""));
-        } else {
+            person.setRefCode(formattedDate + formattedPhoneNo);
+
             return personRepository.insertPerson(person);
+        } else {
+            return Either.left(new Exception(""));
         }
     }
 
