@@ -20,12 +20,12 @@ public class PersonService {
         this.personRepository = personRepository;
     }
 
-    public Either<Integer, Integer> register(Person person) {
+    public Either<Exception, Integer> register(Person person) {
         int phoneLength = person.getPhoneNo().length();
         person.setRefCode(person.getPhoneNo().substring(phoneLength - 4, phoneLength));
 
         if (person.getSalary() < 0 || person.getSalary() < 15000) {
-            return Either.left(0);
+            return Either.left(new Exception(""));
         } else {
             return personRepository.insertPerson(person);
         }
