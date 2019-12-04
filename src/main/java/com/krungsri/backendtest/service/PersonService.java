@@ -1,6 +1,7 @@
 package com.krungsri.backendtest.service;
 
 import com.krungsri.backendtest.dto.PersonDTO;
+import com.krungsri.backendtest.exception.InvalidSalaryException;
 import com.krungsri.backendtest.model.Person;
 import com.krungsri.backendtest.repository.PersonRepository;
 import io.vavr.control.Either;
@@ -36,7 +37,7 @@ public class PersonService {
 
             return personRepository.insertPerson(person);
         } else {
-            return Either.left(new Exception(""));
+            return Either.left(new InvalidSalaryException("Salary is less than 15000 Baht"));
         }
     }
 
