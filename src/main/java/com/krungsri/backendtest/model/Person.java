@@ -2,28 +2,42 @@ package com.krungsri.backendtest.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.NotBlank;
 import java.util.UUID;
 
 public class Person {
 
     private final UUID id;
+    @NotBlank
     private final String username;
+
+    @NotBlank
     private String password;
+
+    @NotBlank
     private String phoneNo;
+
+    @NotBlank
     private String firstName;
+
+    @NotBlank
     private String lastName;
+
+    @NotBlank
     private String address;
+
     private long salary;
+
     private String refCode;
 
     public Person(UUID id,
-                  @JsonProperty("username") String username,
-                  @JsonProperty("password") String password,
-                  @JsonProperty("phoneNo") String phoneNo,
-                  @JsonProperty("firstName") String firstName,
-                  @JsonProperty("lastName") String lastName,
-                  @JsonProperty("address") String address,
-                  @JsonProperty("salary") long salary,
+                  @JsonProperty(value = "username", required = true) String username,
+                  @JsonProperty(value = "password", required = true) String password,
+                  @JsonProperty(value = "phoneNo", required = true) String phoneNo,
+                  @JsonProperty(value = "firstName", required = true) String firstName,
+                  @JsonProperty(value = "lastName", required = true) String lastName,
+                  @JsonProperty(value = "address", required = true) String address,
+                  @JsonProperty(value = "salary", required = true) long salary,
                   String refCode) {
         this.id = id;
         this.refCode = refCode;

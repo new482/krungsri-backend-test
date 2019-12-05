@@ -88,7 +88,7 @@ public class PersonRepositoryImp implements PersonRepository {
                         rs.getString("ref_code")
                 );
             });
-            
+
             return Optional.ofNullable(person);
         } catch (Exception e) {
             return Optional.empty();
