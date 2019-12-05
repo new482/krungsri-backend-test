@@ -25,7 +25,7 @@ public class PersonService {
         this.personRepository = personRepository;
     }
 
-    public Either<Exception, Integer> register(Person person) {
+    public Either<Exception, String> register(Person person) {
         if (person.getSalary() >= 15000) {
             Date date = new Date();
             SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");

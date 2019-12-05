@@ -3,9 +3,11 @@ package com.krungsri.backendtest.repository;
 import com.krungsri.backendtest.model.Person;
 import io.vavr.control.Either;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,7 +24,7 @@ public class PersonRepositoryImp implements PersonRepository {
     }
 
     @Override
-    public Either<Exception, Integer> insertPerson(UUID id, Person person) {
+    public Either<Exception, String> insertPerson(UUID id, Person person) {
         final String sql = "INSERT INTO person (id, username, password, phone_no, " +
                 "first_name, last_name, address, salary, ref_code) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -40,10 +42,11 @@ public class PersonRepositoryImp implements PersonRepository {
                     person.getSalary(),
                     person.getRefCode()
             );
-            System.out.println("Insert success");
-            return Either.right(1);
+
+            return Either.right("success");
+        } catch (DuplicateKeyException e) {
+            return Either.left(new DuplicateKeyException("Person has already existed"));
         } catch (Exception e) {
-            System.out.println("Insert error: " + e);
             return Either.left(e);
         }
     }
@@ -64,27 +67,31 @@ public class PersonRepositoryImp implements PersonRepository {
                     rs.getString("ref_code")
             );
         });
+
         return people;
     }
 
     @Override
     public Optional<Person> findById(UUID id) {
         final String sql = "SELECT * FROM person WHERE id = ?";
-
-        Person person = jdbc.queryForObject(sql, new Object[]{id}, (rs, i) -> {
-            return new Person(
-                    UUID.fromString(rs.getString("id")),
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getString("phone_no"),
-                    rs.getString("first_name"),
-                    rs.getString("last_name"),
-                    rs.getString("address"),
-                    rs.getLong("salary"),
-                    rs.getString("ref_code")
-            );
-        });
-
-        return Optional.ofNullable(person);
+        try {
+            Person person = jdbc.queryForObject(sql, new Object[]{id}, (rs, i) -> {
+                return new Person(
+                        UUID.fromString(rs.getString("id")),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("phone_no"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("address"),
+                        rs.getLong("salary"),
+                        rs.getString("ref_code")
+                );
+            });
+            
+            return Optional.ofNullable(person);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 }

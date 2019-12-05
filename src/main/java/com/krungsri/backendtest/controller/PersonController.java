@@ -7,6 +7,7 @@ import com.krungsri.backendtest.helper.ResponseHandler;
 import com.krungsri.backendtest.model.Person;
 import com.krungsri.backendtest.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +38,8 @@ public class PersonController {
         ObjectNode response = Match(personService.register(person)).of(
                 Case($Right($()), v -> resHandler.successResponse(v, 200)),
                 Case($Left($(instanceOf(InvalidSalaryException.class))), e -> resHandler.failureResponse(e.getMessage(), 400)),
-                Case($Left($(instanceOf(Exception.class))), e -> resHandler.failureResponse("test", 400))
+                Case($Left($(instanceOf(DuplicateKeyException.class))), e -> resHandler.failureResponse(e.getMessage(), 409)),
+                Case($Left($(instanceOf(Exception.class))), e -> resHandler.failureResponse(e.getMessage(), 500))
         );
 
         return response;

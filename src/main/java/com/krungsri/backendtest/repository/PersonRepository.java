@@ -8,9 +8,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface PersonRepository {
-    Either<Exception, Integer> insertPerson(UUID id, Person person);
+    Either<Exception, String> insertPerson(UUID id, Person person);
 
-    default Either<Exception, Integer> insertPerson(Person person) {
+    default Either<Exception, String> insertPerson(Person person) {
 
         return insertPerson(UUID.randomUUID(), person);
     }
