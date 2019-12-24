@@ -68,9 +68,7 @@ public class PersonService {
                         v.getAddress(),
                         v.getSalary(),
                         v.getRefCode(),
-                        classifyMemberType(v.getSalary()))
-
-                );
+                        classifyMemberType(v.getSalary())));
     }
 
     private String classifyMemberType(Long salary) {

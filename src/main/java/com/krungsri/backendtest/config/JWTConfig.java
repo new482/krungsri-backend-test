@@ -16,7 +16,7 @@ public class JWTConfig {
     public FilterRegistrationBean<JWTFilter> filterFilterRegistrationBean() {
         FilterRegistrationBean<JWTFilter> filterFilterRegistrationBean = new FilterRegistrationBean<>();
         filterFilterRegistrationBean.setFilter(jwtFilter);
-        filterFilterRegistrationBean.addUrlPatterns("api/v1/secured/*");
+        filterFilterRegistrationBean.addUrlPatterns("/api/v1/secured/*");
         return filterFilterRegistrationBean;
     }
 }
