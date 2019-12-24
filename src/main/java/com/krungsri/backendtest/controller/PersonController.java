@@ -20,7 +20,6 @@ import static io.vavr.Patterns.$Left;
 import static io.vavr.Patterns.$Right;
 import static io.vavr.Predicates.instanceOf;
 
-@RequestMapping("api/v1/person")
 @RestController
 public class PersonController {
 
@@ -33,7 +32,7 @@ public class PersonController {
         this.resHandler = resHandler;
     }
 
-    @PostMapping
+    @RequestMapping(value = "api/v1/person", method = RequestMethod.POST)
     public ObjectNode registerPerson(@Valid @NonNull @RequestBody Person person) {
         ObjectNode response = Match(personService.register(person)).of(
                 Case($Right($()), v -> resHandler.successResponse(v, 200)),
@@ -45,13 +44,13 @@ public class PersonController {
         return response;
     }
 
-    @GetMapping
+    @RequestMapping(value = "api/v1/secured/person", method = RequestMethod.GET)
     public ObjectNode getAllPerson() {
 
         return resHandler.successResponse(personService.getAllPerson(), 200);
     }
 
-    @GetMapping(path = "{id}")
+    @RequestMapping(value = "api/v1/secured/person/{id}", method = RequestMethod.GET)
     public ObjectNode getUserById(@PathVariable("id") UUID id) {
         Optional<PersonDTO> personOpt = personService.getPersonById(id);
 
