@@ -12,6 +12,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,8 +43,8 @@ public class PersonController {
     }
 
     @RequestMapping(value = "api/v1/person", method = RequestMethod.POST)
-    public ObjectNode registerPerson(@Valid @NonNull @RequestBody Person person) {
-        ObjectNode response = Match(personService.register(person)).of(
+    public ResponseEntity registerPerson(@Valid @NonNull @RequestBody Person person) {
+        ResponseEntity response = Match(personService.register(person)).of(
                 Case($Right($()), v ->
                         resHandler.successResponse(new ApiToken(Jwts.builder()
                                         .claim("roles", "user")
@@ -50,31 +52,31 @@ public class PersonController {
                                         .setIssuedAt(new Date())
                                         .signWith(SignatureAlgorithm.HS256, secret)
                                         .compact())
-                                , 200)),
+                                , HttpStatus.OK)),
                 Case($Left($(instanceOf(InvalidSalaryException.class))), e ->
-                        resHandler.failureResponse(e.getMessage(), 400)),
+                        resHandler.failureResponse(e.getMessage(), HttpStatus.BAD_REQUEST)),
                 Case($Left($(instanceOf(DuplicateKeyException.class))), e ->
-                        resHandler.failureResponse(e.getMessage(), 409)),
+                        resHandler.failureResponse(e.getMessage(), HttpStatus.CONFLICT)),
                 Case($Left($(instanceOf(Exception.class))), e ->
-                        resHandler.failureResponse(e.getMessage(), 500))
+                        resHandler.failureResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR))
         );
 
         return response;
     }
 
     @RequestMapping(value = "api/v1/secured/person", method = RequestMethod.GET)
-    public ObjectNode getAllPerson() {
+    public ResponseEntity getAllPerson() {
 
-        return resHandler.successResponse(personService.getAllPerson(), 200);
+        return resHandler.successResponse(personService.getAllPerson(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "api/v1/secured/person/{id}", method = RequestMethod.GET)
-    public ObjectNode getUserById(@PathVariable("id") UUID id) {
+    public ResponseEntity getUserById(@PathVariable("id") UUID id) {
         Optional<PersonDTO> personOpt = personService.getPersonById(id);
 
         if (personOpt.isPresent())
-            return resHandler.successResponse(personOpt.get(), 200);
+            return resHandler.successResponse(personOpt.get(), HttpStatus.OK);
         else
-            return resHandler.failureResponse("Person not found", 404);
+            return resHandler.failureResponse("Person not found", HttpStatus.NOT_FOUND);
     }
 }

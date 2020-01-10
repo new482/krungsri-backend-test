@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,25 +20,22 @@ public class ResponseHandler {
         this.mapper = mapper;
     }
 
-    public <T> ObjectNode successResponse(List<T> list, int statusCode) {
+    public <T> ResponseEntity successResponse(List<T> list, HttpStatus statusCode) {
         ArrayNode arrayNode = mapper.valueToTree(list);
         ObjectNode objNode = mapper.createObjectNode();
         objNode.putArray("data").addAll(arrayNode);
-        objNode.put("code", statusCode);
-        return objNode;
+        return new ResponseEntity(objNode, statusCode);
     }
 
-    public <T> ObjectNode successResponse(T body, int statusCode) {
+    public <T> ResponseEntity successResponse(T body, HttpStatus statusCode) {
         ObjectNode objNode = mapper.createObjectNode();
         objNode.putPOJO("data", body);
-        objNode.put("code", statusCode);
-        return objNode;
+        return new ResponseEntity(objNode, statusCode);
     }
 
-    public ObjectNode failureResponse(String message, int statusCode) {
+    public ResponseEntity failureResponse(String message, HttpStatus statusCode) {
         ObjectNode objNode = mapper.createObjectNode();
         objNode.put("error", message);
-        objNode.put("code", statusCode);
-        return objNode;
+        return new ResponseEntity(objNode, statusCode);
     }
 }
